@@ -54,9 +54,40 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """This function returns a connector to a database"""
-    db_connector = mysql.connector.connect(
-        host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
-        database=os.getenv('PERSONAL_DATA_DB_NAME', 'holberton'),
-        user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
-        password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''))
-    return db_connector
+    try:
+        db_connector = mysql.connector.connect(
+            host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
+            database=os.getenv('PERSONAL_DATA_DB_NAME', 'holberton'),
+            user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+            password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''))
+        return db_connector
+    except mysql.connector.Error as err:
+        # print(f"Error: {err}")
+        return None
+
+
+def main() -> None:
+    """Main function that retrieves and displays filtered user data"""
+    db = get_db()
+    if db is None:
+        return
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+
+    fields_to_filter = ['name', 'email', 'phone', 'ssn', 'password']
+    separator = '; '
+
+    for row in rows:
+        message = '; '.join([
+            f"{key}={value}" for key, value in row.items()
+        ])
+        filtered_message = filter_datum(
+            fields_to_filter, '***', message, separator
+        )
+        log_message = f"[HOLBERTON] user_data INFO {filtered_message}"
+        print(log_message)
+
+    cursor.close()
+    db.close()

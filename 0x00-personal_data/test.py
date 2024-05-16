@@ -12,6 +12,8 @@ import os
 # print(cursor.fetchone()[0])
 # cursor.close()
 
-
+paswd_to_hash = base64.b64encode(hashlib.sha256(
+        password.encode()
+        ).digest())
 name = "olakunle"
 print(name.encode())

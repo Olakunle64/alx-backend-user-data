@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """This module has a function for encrypting user password"""
 
+import base64
 import bcrypt
+import hashlib
 
 
-def hash_password(password: str) -> str:
+def hash_password(password: str) -> bytes:
     """
     Hashes a password using bcrypt and returns the hashed password.
 

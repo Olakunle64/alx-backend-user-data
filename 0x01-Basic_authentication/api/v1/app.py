@@ -19,16 +19,22 @@ if os.getenv("AUTH_TYPE") == "auth":
 
 
 @app.before_request
-def beforeRequest():
-    """first method to always execute"""
+def before_request():
+    """Method that runs before each request to
+        handle authentication.
+    """
     if not auth:
-        pass
-    elif auth.require_auth(request.path, ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']):
-        pass
-    elif not auth.authorization_header(request):
-        abort(401)
-    elif not auth.current_user(request):
-        abort(403)
+        return  # No auth required
+
+    # Check if the request path requires authentication
+    if auth.require_auth(
+        request.path,
+        ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    ):
+        if not auth.authorization_header(request):
+            abort(401)  # Unauthorized
+        if not auth.current_user(request):
+            abort(403)  # Forbidden
 
 
 @app.errorhandler(401)

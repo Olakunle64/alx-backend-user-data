@@ -48,7 +48,9 @@ class BasicAuth(Auth):
         ):
             return (None, None)
         credentials = decoded_base64_authorization_header.split(":")
-        return (credentials[0].strip(), credentials[1].strip())
+        email = credentials[0].strip()
+        password = ":".join(credentials[1:]).strip()
+        return (email, password)
 
     def user_object_from_credentials(
             self, user_email: str, user_pwd: str
@@ -84,7 +86,9 @@ class BasicAuth(Auth):
         user_cred = self.extract_user_credentials(b64_decode)
         if None in user_cred:
             return None
-        new_user = self.user_object_from_credentials(user_cred[0], user_cred[1])
+        new_user = self.user_object_from_credentials(
+            user_cred[0], user_cred[1]
+        )
         if not new_user:
             return None
         return new_user

@@ -61,7 +61,10 @@ class BasicAuth(Auth):
             str or not user_pwd or type(user_pwd) is not str
         ):
             return None
-        users = User.search()
+        try:
+            users = User.search()
+        except Exception:
+            return None
         if not User.count() or not len(users):
             return None
         for user in users:

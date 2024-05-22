@@ -2,6 +2,7 @@
 """SessionAuth Class"""
 from api.v1.auth.auth import Auth
 import uuid
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -21,3 +22,21 @@ class SessionAuth(Auth):
         if not session_id or type(session_id) is not str:
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """get the current user"""
+        cookie_value = self.session_cookie(request)
+        user_id = self.user_id_for_session_id(cookie_value)
+        return User.get(user_id)
+
+    def destroy_session(self, request=None):
+        """Destroy a session"""
+        if not request:
+            return False
+        cookie_value = self.session_cookie(request)
+        if not cookie_value:
+            return False
+        if not self.user_id_for_session_id(cookie_value):
+            return False
+        del self.user_id_by_session_id[cookie_value]
+        return True

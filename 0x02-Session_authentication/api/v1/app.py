@@ -9,6 +9,7 @@ from flask_cors import (CORS, cross_origin)
 import os
 from api.v1.auth.auth import Auth
 from api.v1.auth.basic_auth import BasicAuth
+from api.v1.auth.session_auth import SessionAuth
 
 
 app = Flask(__name__)
@@ -19,6 +20,8 @@ if os.getenv("AUTH_TYPE") == "auth":
     auth = Auth()
 if os.getenv("AUTH_TYPE") == "basic_auth":
     auth = BasicAuth()
+if os.getenv("AUTH_TYPE") == "session_auth":
+    auth = SessionAuth()
 
 
 @app.before_request
@@ -38,6 +41,7 @@ def before_request():
             abort(401)  # Unauthorized
         if not auth.current_user(request):
             abort(403)  # Forbidden
+    request.current_user = auth.current_user(request)
 
 
 @app.errorhandler(401)

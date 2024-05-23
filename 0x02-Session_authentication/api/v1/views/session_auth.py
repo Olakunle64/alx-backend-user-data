@@ -16,7 +16,7 @@ def session_login():
         return jsonify({"error": "email missing"}), 400
     if not password:
         return jsonify({"error": "password missing"}), 400
-
+        
     try:
         users = User.search()
     except Exception:

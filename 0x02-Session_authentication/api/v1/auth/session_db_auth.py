@@ -5,7 +5,6 @@ from models.user import User
 from models.user_session import UserSession
 import os
 from datetime import datetime, timedelta
-import uuid
 
 
 class SessionDBAuth(SessionExpAuth):
@@ -14,12 +13,9 @@ class SessionDBAuth(SessionExpAuth):
         """create a session id and save the user_id and
             session id to the database
         """
-        if not user_id or type(user_id) is not str:
+        session_id = super().create_session(user_id)
+        if not session_id:
             return None
-        user = User.get(user_id)
-        if not user:
-            return None
-        session_id = str(uuid.uuid4())
         newUserSession = UserSession()
         newUserSession.user_id = user_id
         newUserSession.session_id = session_id

@@ -5,6 +5,7 @@ from models.user import User
 from models.user_session import UserSession
 import os
 from datetime import datetime, timedelta
+import uuid
 
 
 class SessionDBAuth(SessionExpAuth):
@@ -13,9 +14,12 @@ class SessionDBAuth(SessionExpAuth):
         """create a session id and save the user_id and
             session id to the database
         """
-        session_id = super().create_session(user_id)
-        if not session_id:
+        if not user_id or type(user_id) is not str:
             return None
+        user = User.get(user_id)
+        if not user:
+            return None
+        session_id = str(uuid.uuid4())
         newUserSession = UserSession()
         newUserSession.user_id = user_id
         newUserSession.session_id = session_id
@@ -33,23 +37,11 @@ class SessionDBAuth(SessionExpAuth):
             return user[0].user_id
         if not user[0].created_at:
             return None
-        # user[0].save()
         cr_at = user[0].created_at
         exp_date = cr_at + timedelta(seconds=self.session_duration)
         if exp_date < datetime.utcnow():
-            # print("user[0].created_at: ", user[0].created_at)
-            # print("exp_date: ", exp_date)
-            # print("datetime.now(): ", datetime.now())
             return None
         return user[0].user_id
-        # cr_at = user[0].created_at
-        # exp_date = cr_at + timedelta(seconds=self.session_duration)
-        # if exp_date < datetime.now():
-        #     # print("user[0].created_at: ", user[0].created_at)
-        #     # print("exp_date: ", exp_date)
-        #     # print("datetime.now(): ", datetime.now())
-        #     return None
-        # return user[0].user_id
 
     def destroy_session(self, request=None):
         """Destroy UserSession based on the session_id from cookie"""

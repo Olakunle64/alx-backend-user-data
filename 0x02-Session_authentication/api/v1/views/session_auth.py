@@ -20,9 +20,9 @@ def session_login():
     try:
         users = User.search()
     except Exception:
-        return jsonify({"error": "no user found for this email"}), 400
+        return jsonify({"error": "no user found for this email"}), 404
     if not User.count() or not len(users):
-        return jsonify({"error": "no user found for this email"}), 400
+        return jsonify({"error": "no user found for this email"}), 404
     for user in users:
         if user.email == email:
             if not user.is_valid_password(password):
@@ -34,7 +34,7 @@ def session_login():
                 response = make_response(jsonify(user.to_json()))
                 response.set_cookie(cookie_name, session_id)
                 return response
-    return jsonify({"error": "no user found for this email"}), 400
+    return jsonify({"error": "no user found for this email"}), 404
 
 
 @app_views.route(

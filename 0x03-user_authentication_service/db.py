@@ -41,7 +41,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Dict):
+    def find_user_by(self, **kwargs):
         """find a user based on the keywords args and return
             the first row
         """

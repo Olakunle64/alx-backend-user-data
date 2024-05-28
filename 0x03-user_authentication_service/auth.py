@@ -36,7 +36,7 @@ class Auth:
         """initializing"""
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> TypeVar("User"):
+    def register_user(self, email: str, password: str) -> User:
         """register a user"""
         if not email or not password:
             return

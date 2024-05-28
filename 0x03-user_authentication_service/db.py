@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
+from typing import Dict
 from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
@@ -40,7 +41,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: dict):
+    def find_user_by(self, **kwargs: Dict):
         """find a user based on the keywords args and return
             the first row
         """

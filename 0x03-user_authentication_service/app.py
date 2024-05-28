@@ -6,7 +6,7 @@ from flask import (
     make_response, redirect, url_for
 )
 from auth import Auth
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 
 app = Flask(__name__)
 AUTH = Auth()

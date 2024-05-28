@@ -3,7 +3,7 @@
 
 import bcrypt
 from db import DB
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm.exc import NoResultFound
 from typing import TypeVar
 import uuid
 

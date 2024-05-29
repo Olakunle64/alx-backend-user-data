@@ -53,14 +53,11 @@ class DB:
         except InvalidRequestError as e:
             raise e
 
-    def update_user(self, user_id: str, **kwargs: Dict) -> None:
+    def update_user(self, user_id, **kwargs):
         """update a user and return None"""
         user = self.find_user_by(id=user_id)
         expected_attr = user.__dict__.keys()
-        print(expected_attr)
         for key, value in kwargs.items():
-            if key == '_sa_instance_state':
-                continue
             if key not in expected_attr:
                 raise ValueError
             setattr(user, key, value)

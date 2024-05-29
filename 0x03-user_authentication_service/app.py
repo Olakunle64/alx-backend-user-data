@@ -49,7 +49,6 @@ def login():
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout():
     """logout a user by destroying its session_id"""
-    print(url_for('home_page'))
     session_id = request.cookies.get("session_id")
     try:
         user = AUTH.get_user_from_session_id(session_id)

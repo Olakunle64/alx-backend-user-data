@@ -56,9 +56,9 @@ class DB:
     def update_user(self, user_id: str, **kwargs):
         """update a user and return None"""
         user = self.find_user_by(id=user_id)
+        expected_attr = user.__dict__.keys()
         for key, value in kwargs.items():
-            if key not in ["email", "hashed_password",
-                           "session_id", "reset_token", "id"]:
+            if key not in expected_attr:
                 raise ValueError
             setattr(user, key, value)
         self._session.commit()

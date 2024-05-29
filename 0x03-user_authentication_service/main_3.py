@@ -15,6 +15,7 @@ email = 'test@test.com'
 hashed_password = "hashedPwd"
 
 user = my_db.add_user(email, hashed_password)
+# print(user.)
 print(user.id)
 
 try:
